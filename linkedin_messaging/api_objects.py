@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Callable, Optional, Union, List
+from typing import Any, Callable, Optional, Union
 
 import dataclasses_json
 from dataclasses_json import DataClassJsonMixin, LetterCase, Undefined, config, dataclass_json
@@ -281,16 +281,18 @@ class NavigationContext:
 class ArticleComponent:
     navigation_context: Optional[NavigationContext] = None
 
+
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
 @dataclass
-class ImageAttrbutes:
+class ImageAttributes:
     vector_image: Optional[VectorImage] = None
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
 @dataclass
 class Image:
-    attributes: list[ImageAttrbutes] = field(default_factory=list)
+    attributes: list[ImageAttributes] = field(default_factory=list)
+
 
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
 @dataclass
@@ -364,6 +366,7 @@ class ArticleContent:
 @dataclass
 class ActorName:
     text: str = ""
+
 
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
 @dataclass
