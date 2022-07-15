@@ -3,7 +3,13 @@ from datetime import datetime
 from typing import Any, Callable, Optional, Union
 
 import dataclasses_json
-from dataclasses_json import DataClassJsonMixin, LetterCase, Undefined, config, dataclass_json
+from dataclasses_json import (
+    DataClassJsonMixin,
+    LetterCase,
+    Undefined,
+    config,
+    dataclass_json,
+)
 
 
 class URN:
@@ -134,7 +140,9 @@ class AttributeType:
 class Attribute:
     start: int = 0
     length: int = 0
-    type_: Optional[AttributeType] = field(metadata=config(field_name="type"), default=None)
+    type_: Optional[AttributeType] = field(
+        metadata=config(field_name="type"), default=None
+    )
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
@@ -252,7 +260,9 @@ class MessageCustomContent:
         default=None,
     )
     third_party_media: Optional[ThirdPartyMedia] = field(
-        metadata=config(field_name="com.linkedin.voyager.messaging.shared.ThirdPartyMedia"),
+        metadata=config(
+            field_name="com.linkedin.voyager.messaging.shared.ThirdPartyMedia"
+        ),
         default=None,
     )
 
@@ -346,15 +356,19 @@ class VideoComponent:
 class ArticleContent:
     image_component: Optional[ImageComponent] = field(
         metadata=config(field_name="com.linkedin.voyager.feed.render.ImageComponent"),
-        default=None
+        default=None,
     )
     video_component: Optional[VideoComponent] = field(
-        metadata=config(field_name="com.linkedin.voyager.feed.render.LinkedInVideoComponent"),
-        default=None
+        metadata=config(
+            field_name="com.linkedin.voyager.feed.render.LinkedInVideoComponent"
+        ),
+        default=None,
     )
     document_component: Optional[DocumentComponent] = field(
-        metadata=config(field_name="com.linkedin.voyager.feed.render.DocumentComponent"),
-        default=None
+        metadata=config(
+            field_name="com.linkedin.voyager.feed.render.DocumentComponent"
+        ),
+        default=None,
     )
     article_component: Optional[ArticleComponent] = field(
         metadata=config(field_name="com.linkedin.voyager.feed.render.ArticleComponent"),
