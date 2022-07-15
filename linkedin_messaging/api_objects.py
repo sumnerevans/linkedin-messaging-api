@@ -3,7 +3,13 @@ from datetime import datetime
 from typing import Any, Callable, Optional, Union
 
 import dataclasses_json
-from dataclasses_json import DataClassJsonMixin, LetterCase, Undefined, config, dataclass_json
+from dataclasses_json import (
+    DataClassJsonMixin,
+    LetterCase,
+    Undefined,
+    config,
+    dataclass_json,
+)
 
 
 class URN:
@@ -94,6 +100,7 @@ class MiniProfile:
     last_name: Optional[str] = None
     occupation: Optional[str] = None
     memorialized: bool = False
+    object_urn: Optional[URN] = None
     picture: Optional[Picture] = None
 
 
@@ -133,7 +140,9 @@ class AttributeType:
 class Attribute:
     start: int = 0
     length: int = 0
-    type_: Optional[AttributeType] = field(metadata=config(field_name="type"), default=None)
+    type_: Optional[AttributeType] = field(
+        metadata=config(field_name="type"), default=None
+    )
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
@@ -251,7 +260,9 @@ class MessageCustomContent:
         default=None,
     )
     third_party_media: Optional[ThirdPartyMedia] = field(
-        metadata=config(field_name="com.linkedin.voyager.messaging.shared.ThirdPartyMedia"),
+        metadata=config(
+            field_name="com.linkedin.voyager.messaging.shared.ThirdPartyMedia"
+        ),
         default=None,
     )
 
@@ -283,7 +294,82 @@ class ArticleComponent:
 
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
 @dataclass
+class ImageAttributes:
+    vector_image: Optional[VectorImage] = None
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
+@dataclass
+class Image:
+    attributes: list[ImageAttributes] = field(default_factory=list)
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
+@dataclass
+class ImageComponent:
+    images: list[Image] = field(default_factory=list)
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
+@dataclass
+class Document:
+    transcribed_document_url: str = ""
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
+@dataclass
+class DocumentComponent:
+    document: Optional[Document] = None
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
+@dataclass
+class StreamLocations:
+    url: str = ""
+    expires_at: int = -1
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
+@dataclass
+class ProgressiveStreams:
+    width: int = -1
+    height: int = -1
+    size: int = -1
+    media_type: str = ""
+    streaming_locations: list[StreamLocations] = field(default_factory=list)
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
+@dataclass
+class VideoPlayMetadata:
+    progressive_streams: list[ProgressiveStreams] = field(default_factory=list)
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
+@dataclass
+class VideoComponent:
+    video_play_metadata: Optional[VideoPlayMetadata] = None
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
+@dataclass
 class ArticleContent:
+    image_component: Optional[ImageComponent] = field(
+        metadata=config(field_name="com.linkedin.voyager.feed.render.ImageComponent"),
+        default=None,
+    )
+    video_component: Optional[VideoComponent] = field(
+        metadata=config(
+            field_name="com.linkedin.voyager.feed.render.LinkedInVideoComponent"
+        ),
+        default=None,
+    )
+    document_component: Optional[DocumentComponent] = field(
+        metadata=config(
+            field_name="com.linkedin.voyager.feed.render.DocumentComponent"
+        ),
+        default=None,
+    )
     article_component: Optional[ArticleComponent] = field(
         metadata=config(field_name="com.linkedin.voyager.feed.render.ArticleComponent"),
         default=None,
@@ -292,7 +378,20 @@ class ArticleContent:
 
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
 @dataclass
+class ActorName:
+    text: str = ""
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
+@dataclass
+class Actor:
+    name: Optional[ActorName] = None
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
+@dataclass
 class FeedUpdate:
+    actor: Optional[Actor] = None
     commentary: Optional[Commentary] = None
     content: Optional[ArticleContent] = None
 
